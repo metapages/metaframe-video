@@ -1,14 +1,40 @@
 import { FunctionalComponent } from "preact";
-import { useContext } from "preact/hooks";
-import { MetaframeContext } from "@metapages/metaframe-hook";
+import { useEffect, useState } from "preact/hooks";
+import {
+  useMetaframe,
+} from "@metapages/metaframe-hook";
 import { Badge } from "@chakra-ui/react";
+import { Metaframe, MetaframeInputMap } from "@metapages/metapage";
 
 export const MetaframeOutputsRaw: FunctionalComponent = () => {
-  const metaframe = useContext(MetaframeContext);
+  // This is currently the most performant way to get metaframe
+  // inputs and cleanup properly
+  const metaframeObject = useMetaframe();
+  const [inputs, setInputs] = useState<MetaframeInputMap | undefined>();
+
+  // listen to inputs and cleanup up listener
+  useEffect(() => {
+    if (!metaframeObject?.metaframe) {
+      return;
+    }
+    const metaframe = metaframeObject.metaframe;
+    const onInputs = (newinputs: MetaframeInputMap): void => {
+      setInputs(newinputs);
+    };
+    metaframe.addListener(Metaframe.INPUTS, onInputs);
+
+    return () => {
+      // If the metaframe is cleaned up, also remove the inputs listener
+      metaframe.removeListener(Metaframe.INPUTS, onInputs);
+    };
+  }, [metaframeObject.metaframe, setInputs]);
+
   return (
     <div>
       <Badge>metaframe inputs:</Badge>{" "}
-      {metaframe ? JSON.stringify(metaframe.inputs) : "none yet"}
+      {inputs
+        ? JSON.stringify(inputs)
+        : "none yet"}
     </div>
   );
 };
