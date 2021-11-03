@@ -74,7 +74,7 @@ export const ButtonOptionsMenu: FunctionalComponent<{
         aria-label="Metaframe settings"
         // @ts-ignore
         icon={<SettingsIcon />}
-        size="lg"
+        size="md"
         onClick={onClick}
       />
       <OptionsMenu
@@ -95,7 +95,7 @@ const OptionsMenu: FunctionalComponent<{
   options: Option[];
   hashkey?: string;
 }> = ({ hashkey, isOpen, setOpen, options }) => {
-  // isOpen = false; // for debugging/developing
+  // isOpen = true; // for debugging/developing
 
   const [optionsInHashParams, setOptionsInHashParams] =
     useHashParamJson<GenericOptions>(
@@ -335,7 +335,7 @@ const renderInput = (option: Option, value: any, onChange: any) => {
             name={option.name}
             type="text"
             placeholder=""
-            value={value}
+            value={value === undefined ? option.default : value}
             onInput={onChange}
           />
         </Box>
