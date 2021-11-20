@@ -13,6 +13,7 @@ ROOT                               := env_var_or_default("GITHUB_WORKSPACE", `gi
 export CI                          := env_var_or_default("CI", "")
 PACKAGE_NAME_SHORT                 := file_name(`cat package.json | jq -r '.name' | sd '.*/' ''`)
 # Store the CI/dev docker image in github
+# ghcr.io packages cannot have more than one "/" after the organization name
 export DOCKER_IMAGE_PREFIX         := "ghcr.io/metapages/" + PACKAGE_NAME_SHORT
 # Always assume our current cloud ops image is versioned to the exact same app images we deploy
 export DOCKER_TAG                  := `if [ "${GITHUB_ACTIONS}" = "true" ]; then echo "${GITHUB_SHA}"; else echo "$(git rev-parse --short=8 HEAD)"; fi`
@@ -142,6 +143,7 @@ _npm_version npmversionargs="patch":
 _npm_publish: _require_NPM_TOKEN _npm_build
     #!/usr/bin/env bash
     if [ "{{NPM_PUBLISH}}" != "true" ]; then
+
         exit 0
     fi
     set -euo pipefail
