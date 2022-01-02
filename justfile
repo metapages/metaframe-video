@@ -264,6 +264,7 @@ _githubpages_publish: _ensureGitPorcelain
     if [ -f ~/.aliases ]; then cp ~/.aliases {{ROOT}}/.tmp/.aliases; fi
     export WORKSPACE=/repo && \
         docker run \
+            --platform linux/$(docker version -f '{{{{json .}}' | jq -r '.Server.Arch') \
             --rm \
             -ti \
             -e DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} \
@@ -287,8 +288,8 @@ _build_docker:
 
     if [[ "$(docker images -q {{DOCKER_IMAGE_PREFIX}}:{{DOCKER_TAG}} 2> /dev/null)" == "" ]]; then
         echo -e "🌱🌱  ➡ {{bold}}Building docker image ...{{normal}} 🚪🚪 ";
-        echo -e "🌱 </> {{bold}}docker build -t {{DOCKER_IMAGE_PREFIX}}:{{DOCKER_TAG}} . {{normal}}🚪 ";
-        docker build -t {{DOCKER_IMAGE_PREFIX}}:{{DOCKER_TAG}} . ;
+        echo -e "🌱 </> {{bold}}docker build --platform linux/$(docker version -f '{{{{json .}}' | jq -r '.Server.Arch') -t {{DOCKER_IMAGE_PREFIX}}:{{DOCKER_TAG}} . {{normal}}🚪 ";
+        docker build --platform linux/$(docker version -f '{{{{json .}}' | jq -r '.Server.Arch') -t {{DOCKER_IMAGE_PREFIX}}:{{DOCKER_TAG}} . ;
     fi
 
 _ensure_inside_docker:
