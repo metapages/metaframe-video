@@ -15,10 +15,10 @@
   "homepage": "https://github.com/metapages/metaframe-template-preact/tree/main/docs#readme",
   "scripts": {
     "preinstall": "npm set progress=false && npm set audit false && npm config set fund false",
-    "start": "vite",
+    "start": "just dev",
     "prebuild": "./node_modules/typescript/bin/tsc --build",
-    "build": "vite build",
-    "serve": "vite preview"
+    "build": "just build",
+    "serve": "just serve"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",

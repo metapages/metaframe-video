@@ -176,7 +176,9 @@ _githubpages_publish: _ensureGitPorcelain
     git rebase --strategy recursive --strategy-option theirs ${CURRENT_BRANCH}
 
     # Then build
-    just _browser_assets_build ./v$(cat package.json | jq -r .version)
+    BASE=$(cat package.json | jq -r .name | cut -d'/' -f2)
+    # We build twice to keep all old versions
+    just _browser_assets_build $BASE
     just _browser_assets_build
 
     # Now commit and push
