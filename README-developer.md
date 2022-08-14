@@ -6,17 +6,6 @@ Target audience: developers building [metaframes](https://metapages.org/) or any
 
 It has everything you need to get a connectable [metaframe](https://metapages.org/) website up and running and deployed.
 
-The is a template repository (so fork and run) for creating a [metaframe](https://metapages.org/) with the following features
-  - minimal host requirements:
-    - [just](https://github.com/casey/just)
-    - [docker](https://docs.docker.com/get-started/)
-    - [deno](https://deno.land/manual/getting_started/installation)
-    - [mkcert](https://github.com/FiloSottile/mkcert#installation)
-  - automatic https certificate generation
-  - single command development (`just dev`)
-  - single command publishing to [npm](https://www.npmjs.com/)
-  - single command publishing to [github pages](https://pages.github.com/)
-
 ## Fork and modify
 
 1) Fork OR Create new repository
@@ -53,21 +42,38 @@ You'll have to manually fix the differences where they conflict (they will).
 
 ## Host requirements
 
-   - [just](https://github.com/casey/just)
-   - [docker](https://docs.docker.com/get-started/)
-   - [deno](https://deno.land/manual/getting_started/installation)
-   - [mkcert](https://github.com/FiloSottile/mkcert#installation)
+  - [just](https://github.com/casey/just)
+  - [docker](https://docs.docker.com/get-started/)
+  - [deno](https://deno.land/manual/getting_started/installation)
+  - [mkcert](https://github.com/FiloSottile/mkcert#installation)
 
 That's it. Commands are self-documenting: just type `just`
 
 ## Features
 
-- `vite` for fast building
-- `preact` for efficient, fast loading sites
-- `typescript` for type checking
-- `chakra-ui.com` for the UI framework
-- `just` for a single method to build/test/deploy/publish
-- `docker` because I don't want to touch/rely your host system except where needed
+   - automatic https certificate generation
+   - single command development (`just dev`)
+   - single command publishing to [npm](https://www.npmjs.com/)
+   - single command publishing to [github pages](https://pages.github.com/)
+   - `vite` for fast building
+   - `preact` for efficient, fast loading sites
+   - `typescript` for type checking
+   - `chakra-ui.com` for the UI framework
+   - `just` for a single method to build/test/deploy/publish
+   - `docker` because I don't want to touch/rely your host system except where needed
+   - [Github Pages](https://pages.github.com/) publishing
+     - automatic versioning:
+       - `/`: latest
+       - `/v1.5.2/`: that version tag (so all published versions are available forever)
+   - [npm](https://www.npmjs.com/) module publishing
+     - automatic versioning, linked with above
+     - external package versioned with the publised website
+   - Common UI elements
+     - Help button showing the (rendered) local `./Readme.md` file
+     - Options (configurable) stored encoded in the URL hash params
+   - Metaframe outputs updated below, when connected.
+   - `just`file powered, dockerized, automated with dual human/CI controls
+
 
 ## Assumptions:
 
@@ -77,3 +83,12 @@ That's it. Commands are self-documenting: just type `just`
    - github pages 👆 comes with limited options for some config:
      - we build browser assets in `./docs` instead of `./dist` (typical default) so that publishing to github pages is less configuration
  - Operating this repository should be "easy" and enjoyable. It's a product of love and passion, I am hoping that you enjoy using at least just a little bit.
+
+## Steps:
+
+  1. Fork this repo
+  2. Clone locally
+  3. Modify `package.json` fields to match your own repository e.g. change the module name
+  4. `just dev`
+       - Modify code and publish:
+       - `just publish`
