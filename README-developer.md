@@ -6,6 +6,17 @@ Target audience: developers building [metaframes](https://metapages.org/) or any
 
 It has everything you need to get a connectable [metaframe](https://metapages.org/) website up and running and deployed.
 
+The is a template repository (so fork and run) for creating a [metaframe](https://metapages.org/) with the following features
+  - minimal host requirements:
+    - [just](https://github.com/casey/just)
+    - [docker](https://docs.docker.com/get-started/)
+    - [deno](https://deno.land/manual/getting_started/installation)
+    - [mkcert](https://github.com/FiloSottile/mkcert#installation)
+  - automatic https certificate generation
+  - single command development (`just dev`)
+  - single command publishing to [npm](https://www.npmjs.com/)
+  - single command publishing to [github pages](https://pages.github.com/)
+
 ## Fork and modify
 
 1) Fork OR Create new repository
@@ -42,8 +53,10 @@ You'll have to manually fix the differences where they conflict (they will).
 
 ## Host requirements
 
-  - [just](https://github.com/casey/just#installation)
-  - [docker](https://www.docker.com/products/docker-desktop)
+   - [just](https://github.com/casey/just)
+   - [docker](https://docs.docker.com/get-started/)
+   - [deno](https://deno.land/manual/getting_started/installation)
+   - [mkcert](https://github.com/FiloSottile/mkcert#installation)
 
 That's it. Commands are self-documenting: just type `just`
 
