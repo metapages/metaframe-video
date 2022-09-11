@@ -5,7 +5,7 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// values acted on: [glitch]
+// values acted on: [glitch | lib]
 const DEPLOY_TARGET: string | undefined = process.env.DEPLOY_TARGET;
 const HOST: string = process.env.HOST || "metaframe1.localhost";
 const PORT: string = process.env.PORT || "4440";
@@ -27,11 +27,11 @@ export default defineConfig(({ command, mode }) => ({
   // this is really stupid this should not be necessary
   plugins: [react()],
   build: {
-    outDir: OUTDIR,
+    outDir: DEPLOY_TARGET === "lib" ? "dist" : OUTDIR,
     target: "esnext",
     sourcemap: true,
     minify: mode === "development" ? false : "esbuild",
-    emptyOutDir: false,
+    emptyOutDir: DEPLOY_TARGET === "glitch",
   },
   esbuild: {
     // https://github.com/vitejs/vite/issues/8644
@@ -48,8 +48,8 @@ export default defineConfig(({ command, mode }) => ({
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy#examples
       "Cross-Origin-Opener-Policy": "same-origin",
       "Cross-Origin-Embedder-Policy": "require-corp",
-      // // metapage embedding allways needs all origins
-      // "Access-Control-Allow-Origin": "*",
+      // metapage embedding allways needs all origins
+      "Access-Control-Allow-Origin": "*",
     },
     https:
       CERT_KEY_FILE &&
