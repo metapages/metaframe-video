@@ -1,18 +1,17 @@
 {
-  "name": "@metapages/metaframe-template-preact",
+  "name": "@metapages/metaframe-ffmpeg",
   "version": "0.1.13",
   "repository": {
     "type": "git",
-    "url": "https://github.com/metapages/metaframe-template-preact"
+    "url": "https://github.com/metapages/metaframe-ffmpeg"
   },
   "files": [
-    "dist/**/*",
-    "src/lib/**/*"
+    "dist/**/*"
   ],
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
-  "homepage": "https://github.com/metapages/metaframe-template-preact/tree/main/docs#readme",
+  "homepage": "https://github.com/metapages/metaframe-ffmpeg/tree/main/docs#readme",
   "scripts": {
     "preinstall": "npm set progress=false && npm set audit false && npm config set fund false",
     "start": "just dev",
@@ -21,23 +20,32 @@
     "serve": "just serve"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^1.0.15",
-    "@chakra-ui/react": "^1.6.5",
-    "@emotion/react": "^11.4.0",
+    "@chakra-ui/icons": "^2.0.9",
+    "@chakra-ui/react": "^2.3.2",
+    "@dropzone-ui/react": "^6.7.10",
+    "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.3.0",
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.5",
     "@metapages/hash-query": "^0.4.5",
     "@metapages/metaframe-hook": "^1.0.9",
     "@metapages/metapage": "^0.12.3",
-    "framer-motion": "^4.1.17",
-    "preact": "^10.10.6",
-    "preact-router": "^4.1.0"
+    "@types/shell-quote": "^1.7.1",
+    "formik": "^2.2.9",
+    "framer-motion": "^7.3.2",
+    "localforage": "^1.10.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
+    "shell-quote": "^1.7.3",
+    "yup": "^0.32.11",
+    "zustand": "^4.1.1"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.3.0",
     "@types/node": "^12.20.10",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "@types/react-router-dom": "^5.1.7",
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.1.0",
     "typescript": "^4.8.3",
     "vite": "^3.1.0"
   },
