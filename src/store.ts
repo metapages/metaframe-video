@@ -12,6 +12,7 @@ interface FilesState {
   getCachedFile: (filename: string) => Promise<File>;
   cacheFile: (filename: string) => void;
   syncCachedFiles: () => void;
+  getFile: (filename: string) => Promise<File>;
 
   uploadedFiles: FileValidated[];
   setUploadedFiles: (files: FileValidated[]) => Promise<void>;
@@ -26,9 +27,6 @@ interface FilesState {
   ffmpeg :FFmpeg|undefined;
   setFFmpeg: (ffmpeg: FFmpeg) => void;
 
-  // cancelCallback: (() => void) | null;
-  // setCancelCallback: (fn: (() => void)|null) => void;
-
   error: string | null;
   setError: (error: string | null) => void;
 }
@@ -38,6 +36,20 @@ export const useFileStore = create<FilesState>((set, get) => ({
   setCachedFiles: (files: string[]) => set((state) => ({ cachedFiles: files })),
   getCachedFile: async (filename: string) => {
     return Promise.resolve(new File([""], filename));
+  },
+
+  getFile: async (filename: string) => {
+    const uploadedFile = get().uploadedFiles.find((file) => file.file.name === filename);
+    if (uploadedFile) {
+      return uploadedFile.file;
+    }
+    if (get().cachedFiles.includes(filename)) {
+      const fileFromCache :File | undefined | null  = await localForage.getItem(filename);
+      if (fileFromCache) {
+        return fileFromCache;
+      }
+    }
+    throw `File not found: ${filename}`;
   },
 
   cacheFile: async (filename: string) => {
