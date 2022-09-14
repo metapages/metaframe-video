@@ -8,7 +8,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { useHashParamInt } from "@metapages/hash-query";
-import { TabPanelCommand } from "/@/components/TabPanelCommand";
+import { TabPanelRecord } from "../components/TabPanelRecord";
 import { TabPanelHelp } from "/@/components/TabPanelHelp";
 import { TabPanelUpload } from "../components/TabPanelUpload";
 import { TabPanelFileList } from "../components/TabPanelFileList";
@@ -23,7 +23,7 @@ export const Route: React.FC = () => {
 
         <TabList>
           <Center><StatusIcon /></Center>
-          <Tab>Command</Tab>
+          <Tab>Record</Tab>
           <Tab>Files</Tab>
           <Tab>Upload</Tab>
           <Tab>Help</Tab>
@@ -31,7 +31,7 @@ export const Route: React.FC = () => {
 
         <TabPanels>
           <TabPanel>
-            <TabPanelCommand />
+            <TabPanelRecord />
           </TabPanel>
 
           <TabPanel>

@@ -1,5 +1,5 @@
 import { CheckIcon, WarningIcon } from "@chakra-ui/icons";
-import { Spinner } from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 import { useFileStore } from "../store";
 
 export const StatusIcon: React.FC = () => {
@@ -7,14 +7,14 @@ export const StatusIcon: React.FC = () => {
 
   switch (mode) {
     case "error":
-      return <WarningIcon color="red" />;
+      return <Center p={2}><WarningIcon color="red" /></Center>;
     case "idle":
-      return <WarningIcon color="blue" />;
+      return <Center p={2}><WarningIcon color="blue" /></Center>;
     case "success":
-      return <CheckIcon color="green" />;
+      return <Center p={2}><CheckIcon color="green" /></Center>;
     case "running":
-      return <Spinner size="sm" />;
+      return <Center p={2}><Spinner size="sm" /></Center>;
     case "cancelled":
-      return <WarningIcon color="blue" />;
+      return <Center p={2}><WarningIcon color="blue" /></Center>;
   }
 };

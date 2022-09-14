@@ -1,8 +1,6 @@
 import { FileValidated } from "@dropzone-ui/react";
 import create from "zustand";
 import localForage from "localforage";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
-
 export type Mode = "idle" | "running" | "cancelled" | "error" | "success";
 
 
@@ -23,9 +21,6 @@ interface FilesState {
 
   mode: Mode;
   setMode: (mode: Mode) => void;
-
-  ffmpeg :FFmpeg|undefined;
-  setFFmpeg: (ffmpeg: FFmpeg) => void;
 
   error: string | null;
   setError: (error: string | null) => void;
@@ -156,9 +151,6 @@ export const useFileStore = create<FilesState>((set, get) => ({
 
   mode: "idle",
   setMode: (mode: Mode) => set((state) => ({ mode })),
-
-  ffmpeg: undefined,
-  setFFmpeg: (ffmpeg: FFmpeg) => set((state) => ({ ffmpeg })),
 
   error: null,
   setError: (error: string | null) => set((state) => ({ error })),

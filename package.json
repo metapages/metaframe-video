@@ -1,9 +1,9 @@
 {
-  "name": "@metapages/metaframe-ffmpeg",
+  "name": "@metapages/metaframe-video",
   "version": "0.1.6",
   "repository": {
     "type": "git",
-    "url": "https://github.com/metapages/metaframe-ffmpeg"
+    "url": "https://github.com/metapages/metaframe-video"
   },
   "files": [
     "dist/**/*"
@@ -11,7 +11,7 @@
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
-  "homepage": "https://github.com/metapages/metaframe-ffmpeg/tree/main/docs#readme",
+  "homepage": "https://github.com/metapages/metaframe-video/tree/main/docs#readme",
   "scripts": {
     "preinstall": "npm set progress=false && npm set audit false && npm config set fund false",
     "start": "just dev",
@@ -25,19 +25,22 @@
     "@dropzone-ui/react": "^6.7.10",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.3.0",
-    "@ffmpeg/core": "^0.11.0",
-    "@ffmpeg/ffmpeg": "^0.11.5",
     "@metapages/hash-query": "^0.4.5",
     "@metapages/metaframe-hook": "^1.0.9",
     "@metapages/metapage": "^0.12.3",
+    "@types/recordrtc": "^5.6.8",
     "@types/shell-quote": "^1.7.1",
+    "@types/video.js": "^7.3.47",
     "formik": "^2.2.9",
     "framer-motion": "^7.3.2",
     "localforage": "^1.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
+    "recordrtc": "^5.6.2",
     "shell-quote": "^1.7.3",
+    "video.js": "^7.20.2",
+    "videojs-record": "^4.5.0",
     "yup": "^0.32.11",
     "zustand": "^4.1.1"
   },
