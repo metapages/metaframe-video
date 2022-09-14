@@ -11,7 +11,6 @@ import {
 import { useHashParamBoolean, useHashParamInt } from "@metapages/hash-query";
 import { TabPanelRecord } from "../components/TabPanelRecord";
 import { TabPanelHelp } from "/@/components/TabPanelHelp";
-import { TabPanelUpload } from "../components/TabPanelUpload";
 import { TabPanelFileList } from "../components/TabPanelFileList";
 import { StatusIcon } from "../components/StatusIcon";
 
@@ -19,7 +18,7 @@ export const Route: React.FC = () => {
   const [tabIndex, setTabIndex] = useHashParamInt("tab", 0);
   const [collapsed] = useHashParamBoolean("c");
 
-  if (!collapsed) {
+  if (collapsed) {
     return (
       <HStack spacing={1} width="100%" alignItems="flex-start">
         <StatusIcon />
@@ -35,7 +34,6 @@ export const Route: React.FC = () => {
           <StatusIcon />
           <Tab>Record</Tab>
           <Tab>Files</Tab>
-          <Tab>Upload</Tab>
           <Tab>Help</Tab>
         </TabList>
 
@@ -46,10 +44,6 @@ export const Route: React.FC = () => {
 
           <TabPanel>
             <TabPanelFileList />
-          </TabPanel>
-
-          <TabPanel>
-            <TabPanelUpload />
           </TabPanel>
 
           <TabPanel>

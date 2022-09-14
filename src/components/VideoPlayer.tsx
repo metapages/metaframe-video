@@ -1,23 +1,26 @@
 import React, { useEffect, useRef } from "react";
 import videojs from "video.js";
+import { useState } from 'react';
 
 const videoJsOptions = {
-  autoplay: false,
+  autoplay: true,
   playbackRates: [0.5, 1, 1.25, 1.5, 2],
-  width: 720,
-  height: 300,
+  width: 320,
+  height: 240,
   controls: true,
-  sources: [
-    {
-      src: "//vjs.zencdn.net/v/oceans.mp4",
-      type: "video/mp4",
-    },
-  ],
+  // sources: [
+  //   {
+  //     src: "//vjs.zencdn.net/v/oceans.mp4",
+  //     type: "video/mp4",
+  //   },
+  // ],
 };
 
-export const VideoPlayer: React.FC = () => {
+export const VideoPlayer: React.FC<{videoSource?:{type:string, src:string}}> = ({videoSource}) => {
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const playerRef = useRef<videojs.Player | undefined>();
+
 
   useEffect(() => {
     if (!videoRef.current) {
@@ -29,7 +32,7 @@ export const VideoPlayer: React.FC = () => {
 
     const player = videojs(
       videoRef.current,
-      videoJsOptions,
+      videoSource ? { ...videoJsOptions, ...{sources:[videoSource]}} : videoJsOptions,
       function onPlayerReady() {
         console.log("onPlayerReady", this);
       }

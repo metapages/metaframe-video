@@ -1,20 +1,15 @@
-import { FileValidated } from "@dropzone-ui/react";
 import create from "zustand";
 import localForage from "localforage";
+import { FileBlob } from "./components/FileBlob";
 export type Mode = "idle" | "running" | "cancelled" | "error" | "success";
 
-
 interface FilesState {
-  cachedFiles: string[];
-  setCachedFiles: (filenames: string[]) => void;
-  getCachedFile: (filename: string) => Promise<File>;
-  cacheFile: (filename: string) => void;
+  files: FileBlob[];
+  addFile: (file: FileBlob) => void;
+  setFiles: (files: FileBlob[]) => void;
+  getFile: (filename: string) => Promise<File|Blob>;
+  cacheFile: (file: FileBlob) => void;
   syncCachedFiles: () => void;
-  getFile: (filename: string) => Promise<File>;
-
-  uploadedFiles: FileValidated[];
-  setUploadedFiles: (files: FileValidated[]) => Promise<void>;
-  addUploadedFile: (file: FileValidated) => Promise<void>;
 
   deleteFile: (filename: string) => Promise<void>;
   deleteAllFiles: () => Promise<void>;
@@ -27,44 +22,57 @@ interface FilesState {
 }
 
 export const useFileStore = create<FilesState>((set, get) => ({
-
-  cachedFiles: [],
-  setCachedFiles: (files: string[]) => set((state) => ({ cachedFiles: files })),
-  getCachedFile: async (filename: string) => {
-    return Promise.resolve(new File([""], filename));
-  },
+  files: [],
+  setFiles: (files: FileBlob[]) => set((state) => ({ files })),
+  // getCachedFile: async (filename: string) => {
+  //   return Promise.resolve(new File([""], filename));
+  // },
 
   getFile: async (filename: string) => {
-    const uploadedFile = get().uploadedFiles.find((file) => file.file.name === filename);
-    if (uploadedFile) {
-      return uploadedFile.file;
+    const fileBlob = get().files.find((file) => file.name === filename);
+    if (!fileBlob) {
+      throw new Error("File not found");
     }
-    if (get().cachedFiles.includes(filename)) {
-      const fileFromCache :File | undefined | null  = await localForage.getItem(filename);
-      if (fileFromCache) {
-        return fileFromCache;
-      }
+    if (fileBlob.file) {
+      return fileBlob.file;
     }
+
+    if (!fileBlob.cached) {
+      throw `File ${filename} is not cached`;
+    }
+
+    const fileFromCache: File | undefined | null = await localForage.getItem(
+      fileBlob.name
+    );
+    if (fileFromCache) {
+      fileBlob.cached = true;
+      fileBlob.file = fileFromCache;
+      // trigger updates
+      set((state) => ({
+        files: [...get().files],
+      }));
+
+      return fileFromCache;
+    }
+
     throw `File not found: ${filename}`;
   },
 
-  cacheFile: async (filename: string) => {
-    const cachedFiles = [ ...get().cachedFiles ];
-    if (cachedFiles.includes(filename)) {
+  cacheFile: async (file: FileBlob) => {
+    if (file.cached) {
       return;
     }
 
-    const uploadedFile = get().uploadedFiles.find(f => f.file.name === filename);
-    if (!uploadedFile) {
-      // not really how to handle this or how it could happen
-      return;
+    if (!file.file) {
+      throw `cacheFile failed, not file File not found for: ${file.name}`;
     }
 
     try {
-      await localForage.setItem(uploadedFile.file.name, uploadedFile.file);
-      cachedFiles.push(uploadedFile.file.name);
+      await localForage.setItem(file.name, file.file);
+      file.cached = true;
+      // trigger updates
       set((state) => ({
-        cachedFiles
+        files: [...get().files],
       }));
     } catch (err) {
       console.log(err);
@@ -73,78 +81,59 @@ export const useFileStore = create<FilesState>((set, get) => ({
 
   syncCachedFiles: async () => {
     const keys = await localForage.keys();
-    const cachedFiles = get().cachedFiles;
-    const fileSet = new Set<string>([...cachedFiles, ...keys]);
 
-    const sortedKeys = Array.from(fileSet.keys());
-    sortedKeys.sort();
+    const files = get().files;
+    const newFiles: FileBlob[] = [];
+    keys.forEach((key) => {
+      if (!files.find((f) => f.name === key)) {
+        newFiles.push({
+          name: key,
+          cached: true,
+        });
+      }
+    });
 
     set((state) => ({
-      cachedFiles: sortedKeys
+      files: [...files, ...newFiles],
     }));
   },
 
-  uploadedFiles: [],
-  setUploadedFiles: async (files: FileValidated[]) => {
-    // save to cache if not already there
-    // const cachedFiles = [...get().cachedFiles];
-    // const uploadedFiles: FileValidated[] = [];
-    // for (const file of files) {
-    //   if (!file?.file.name || cachedFiles.includes(file.file.name)) {
-    //     continue;
-    //   }
-    //   try {
-    //     await localForage.setItem(file.file.name, file.file);
-    //     console.log("file saved locally", file.file.name);
-    //     uploadedFiles.push(file);
-    //     cachedFiles.push(file.file.name);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }
-    set((state) => ({ uploadedFiles: files }));
-  },
-  addUploadedFile: async (file: FileValidated) => {
+  addFile: async (file: FileBlob) => {
     set((state) => ({
       // overwrite if already exists
-      uploadedFiles: [...state.uploadedFiles.filter(f => f.file.name !== file.file.name), file]
+      files: [...state.files.filter((f) => f.name !== file.name), file],
     }));
   },
 
   deleteFile: async (filename: string) => {
-    const cachedFiles = [...get().cachedFiles];
+    const files = [...get().files];
+    const fileBlob = get().files.find((file) => file.name === filename);
 
-    if (cachedFiles.includes(filename)) {
-      cachedFiles.splice(cachedFiles.indexOf(filename), 1);
+    if (fileBlob) {
+      files.splice(files.indexOf(fileBlob), 1);
       try {
         await localForage.removeItem(filename);
-        console.log("file deleted", filename);
       } catch (err) {
         console.log(err);
       }
     }
 
     set((state) => ({
-      cachedFiles,
-      uploadedFiles: state.uploadedFiles.filter(
-        (file) => file!.file.name !== filename
-      ),
+      files,
     }));
   },
 
   deleteAllFiles: async () => {
-    get().cachedFiles.forEach(async (filename) => {
+    get().files.forEach(async (file) => {
       try {
-        await localForage.removeItem(filename);
-        console.log("file deleted", filename);
+        await localForage.removeItem(file.name);
       } catch (err) {
         console.log(err);
       }
     });
 
     set((state) => ({
-      cachedFiles: [],
-      uploadedFiles: [],
+      files: [],
     }));
 
     return Promise.resolve();
@@ -155,5 +144,4 @@ export const useFileStore = create<FilesState>((set, get) => ({
 
   error: null,
   setError: (error: string | null) => set((state) => ({ error })),
-
 }));
