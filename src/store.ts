@@ -27,6 +27,7 @@ interface FilesState {
 }
 
 export const useFileStore = create<FilesState>((set, get) => ({
+
   cachedFiles: [],
   setCachedFiles: (files: string[]) => set((state) => ({ cachedFiles: files })),
   getCachedFile: async (filename: string) => {

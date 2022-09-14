@@ -1,53 +1,54 @@
-// taken from https://github.com/videojs/video.js/blob/master/docs/guides/react.md
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import videojs from "video.js";
 
 const videoJsOptions = {
-    autoplay: false,
-    playbackRates: [0.5, 1, 1.25, 1.5, 2],
-    width: 720,
-    height: 300,
-    controls: true,
-    sources: [
-      {
-        src: '//vjs.zencdn.net/v/oceans.mp4',
-        type: 'video/mp4',
-      },
-    ],
-  };
+  autoplay: false,
+  playbackRates: [0.5, 1, 1.25, 1.5, 2],
+  width: 720,
+  height: 300,
+  controls: true,
+  sources: [
+    {
+      src: "//vjs.zencdn.net/v/oceans.mp4",
+      type: "video/mp4",
+    },
+  ],
+};
 
 export const VideoPlayer: React.FC = () => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const playerRef = useRef<videojs.Player | undefined>();
 
-    const videoRef = useRef<HTMLVideoElement|null>(null);
+  useEffect(() => {
+    if (!videoRef.current) {
+      return;
+    }
 
-    useEffect(() => {
-        if (!videoRef.current) {
-            return;
-        }
+    videoRef.current.setAttribute("webkit-playsinline", "true");
+    videoRef.current.setAttribute("playsinline", "true");
 
-        videoRef.current.setAttribute("webkit-playsinline", "true");
-        videoRef.current.setAttribute("playsinline", "true");
+    const player = videojs(
+      videoRef.current,
+      videoJsOptions,
+      function onPlayerReady() {
+        console.log("onPlayerReady", this);
+      }
+    );
 
-        console.log('videoRef', videoRef);
+    playerRef.current = player;
 
-        const player = videojs(videoRef.current, videoJsOptions, function onPlayerReady() {
-            console.log("onPlayerReady", this);
-          });
+    return () => {
+      player.dispose();
+    };
+  }, []);
 
-        return () => {
-            player.dispose();
-        }
+  return (
+    <div data-vjs-player>
+      <video ref={videoRef} className="video-js vjs-big-play-centered" />
+    </div>
 
-
-    }, [videoRef]);
-
-
-    return (
-        <div data-vjs-player>
-          <video ref={videoRef} className="video-js vjs-big-play-centered" />
-        </div>
-      );
-}
+  );
+};
 
 // export default class VideoPlayer2 extends React.Component {
 //   componentDidMount() {
