@@ -1,29 +1,23 @@
 {
   "version": "0.6",
   "metadata": {
-    "name": "FFMPEG/video recording and transcoding",
+    "name": "Video/Audio Recorder",
+    "description": "Video and audio recording ",
     "tags": [
-      "ffmpeg",
+      "camera",
+      "sound",
+      "audio",
       "video",
       "recording",
-      "transcoding",
-      "avi",
       "mp4",
       "h264",
-      "mpeg",
-      "mkv",
       "webm"
     ]
   },
-  "inputs": {
-    "*": {
-      "type": "application/octet-stream:base64"
-    }
-  },
   "outputs": {
-    "*": {
-      "type": "application/octet-stream:base64"
+    "video": {
+      "type": "dataref"
     }
   },
-  "allow": "cross-origin-isolated"
+  "allow": "camera;microphone;fullscreen;autoplay;picture-in-picture"
 }

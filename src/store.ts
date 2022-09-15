@@ -1,9 +1,14 @@
 import create from "zustand";
 import localForage from "localforage";
+import videojs from "video.js";
 import { FileBlob } from "./components/FileBlob";
 export type Mode = "idle" | "running" | "cancelled" | "error" | "success";
 
 interface FilesState {
+
+  playSource: videojs.Tech.SourceObject | undefined;
+  setPlaySource: (source: videojs.Tech.SourceObject | undefined) => void;
+
   files: FileBlob[];
   addFile: (file: FileBlob) => void;
   setFiles: (files: FileBlob[]) => void;
@@ -22,11 +27,12 @@ interface FilesState {
 }
 
 export const useFileStore = create<FilesState>((set, get) => ({
+
+  playSource: undefined,
+  setPlaySource: (playSource: videojs.Tech.SourceObject | undefined) => set((state) => ({ playSource })),
+
   files: [],
   setFiles: (files: FileBlob[]) => set((state) => ({ files })),
-  // getCachedFile: async (filename: string) => {
-  //   return Promise.resolve(new File([""], filename));
-  // },
 
   getFile: async (filename: string) => {
     const fileBlob = get().files.find((file) => file.name === filename);

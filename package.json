@@ -1,6 +1,6 @@
 {
   "name": "@metapages/metaframe-video",
-  "version": "0.1.6",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/metapages/metaframe-video"
@@ -27,12 +27,14 @@
     "@metapages/hash-query": "^0.4.5",
     "@metapages/metaframe-hook": "^1.0.9",
     "@metapages/metapage": "^0.12.3",
+    "@types/object-hash": "^2.2.1",
     "@types/recordrtc": "^5.6.8",
     "@types/shell-quote": "^1.7.1",
     "@types/video.js": "^7.3.47",
     "formik": "^2.2.9",
     "framer-motion": "^7.3.2",
     "localforage": "^1.10.0",
+    "object-hash": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",

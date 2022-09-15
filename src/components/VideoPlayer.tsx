@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import videojs from "video.js";
-import { useState } from 'react';
+import videojs, { VideoJsPlayerOptions } from "video.js";
 
-const videoJsOptions = {
+const videoJsOptionsDefault = {
   autoplay: true,
   playbackRates: [0.5, 1, 1.25, 1.5, 2],
   width: 320,
@@ -16,32 +15,40 @@ const videoJsOptions = {
   // ],
 };
 
-export const VideoPlayer: React.FC<{videoSource?:{type:string, src:string}}> = ({videoSource}) => {
-
+export const VideoPlayer: React.FC<{
+  options: VideoJsPlayerOptions;
+  onReady?: () => void;
+}> = ({ options, onReady }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const playerRef = useRef<videojs.Player | undefined>();
 
+  const sources = options?.sources;
 
   useEffect(() => {
     if (!videoRef.current) {
       return;
     }
 
+    if (playerRef.current) {
+      if (sources) {
+        playerRef.current.src(sources);
+      }
+      return;
+    }
+
     videoRef.current.setAttribute("webkit-playsinline", "true");
     videoRef.current.setAttribute("playsinline", "true");
-
-    const player = videojs(
-      videoRef.current,
-      videoSource ? { ...videoJsOptions, ...{sources:[videoSource]}} : videoJsOptions,
-      function onPlayerReady() {
-        console.log("onPlayerReady", this);
-      }
-    );
+    const videoJsOptions = { ...videoJsOptionsDefault, ...options };
+    const player = videojs(videoRef.current, videoJsOptions, onReady);
 
     playerRef.current = player;
+  }, [sources]);
 
+  useEffect(() => {
     return () => {
-      player.dispose();
+      if (playerRef.current) {
+        playerRef.current.dispose();
+      }
     };
   }, []);
 
@@ -49,38 +56,5 @@ export const VideoPlayer: React.FC<{videoSource?:{type:string, src:string}}> = (
     <div data-vjs-player>
       <video ref={videoRef} className="video-js vjs-big-play-centered" />
     </div>
-
   );
 };
-
-// export default class VideoPlayer2 extends React.Component {
-//   componentDidMount() {
-//     // instantiate video.js
-//     this.player = videojs(this.videoNode, this.props, function onPlayerReady() {
-//       console.log("onPlayerReady", this);
-//     });
-
-//     if (this.videoNode) {
-//       this.videoNode.setAttribute("webkit-playsinline", true);
-//       this.videoNode.setAttribute("playsinline", true);
-//     }
-//   }
-
-//   // destroy player on unmount
-//   componentWillUnmount() {
-//     if (this.player) {
-//       this.player.dispose();
-//     }
-//   }
-
-//   // wrap the player in a div with a `data-vjs-player` attribute
-//   // so videojs won't create additional wrapper in the DOM
-//   // see https://github.com/videojs/video.js/pull/3856
-//   render() {
-//     return (
-//       <div data-vjs-player>
-//         <video ref={node => (this.videoNode = node)} className="video-js" />
-//       </div>
-//     );
-//   }
-// }
