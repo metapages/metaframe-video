@@ -1,3 +1,3 @@
-# Your metaframe manual/guide/help goes here
+# Metaframe for video recording
 
-When the user clicks the help button, this readme is displayed.
+TODO
