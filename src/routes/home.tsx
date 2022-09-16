@@ -16,12 +16,16 @@ import { StatusIcon } from "../components/StatusIcon";
 import { TabPanelOptions } from "../components/TabPanelOptions";
 // import { useMetaframeAndInput } from "@metapages/metaframe-hook";
 import { useMetaframe } from "@metapages/metaframe-hook";
+import { useFileStore } from "../store";
+import { FileBlob } from "../components/FileBlob";
+import { DataRef, dataRefToBlob } from "@metapages/data-ref";
 
 export const Route: React.FC = () => {
   const [tabIndex, setTabIndex] = useHashParamInt("tab", 0);
   const [collapsed] = useHashParamBoolean("c");
+  const addFile = useFileStore((state) => state.addFile);
+  const setVideoSrc = useFileStore((state) => state.setPlaySource);
 
-  // const metaframeBlob = useMetaframeAndInput();
   const metaframeBlob = useMetaframe();
 
   useEffect(() => {
@@ -36,18 +40,27 @@ export const Route: React.FC = () => {
       if (keys.length === 0) {
         return;
       }
+
+      // Just take the first input and hope it's video (dataref)
       const key = keys[0];
       const value = inputs[key];
       if (!value) {
         return;
       }
 
-      console.log("input key", key);
-      console.log("input value", value);
-    });
+      (async () => {
+        const ref: DataRef = value;
+        const blob = await dataRefToBlob(ref);
+        const file = new File([blob], key, { type: "video/mp4" });
+        const fileBlob: FileBlob = { name: key, file: file, cached: false };
+        addFile(fileBlob);
 
-    // Just take the first input and hope it's video
-    // metaframeBlob.inputs
+        if (!fileBlob.urlEncoded) {
+          fileBlob.urlEncoded = URL.createObjectURL(fileBlob.file!);
+        }
+        setVideoSrc({ src: fileBlob.urlEncoded!, type: file.type });
+      })();
+    });
 
     return () => {
       if (disposer) {
