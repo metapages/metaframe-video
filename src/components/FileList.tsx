@@ -56,11 +56,11 @@ export const FileList: React.FC = () => {
           <Thead>
             <Tr>
               <Th>Play</Th>
+              <Th>Send</Th>
+              <Th>Delete</Th>
+              <Th>Download</Th>
               <Th>Name</Th>
               <Th>Local browser cache</Th>
-              <Th>Download</Th>
-              <Th>Delete</Th>
-              <Th>Send</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -116,23 +116,36 @@ const FileLineItem: React.FC<{ file: FileBlob; onClick: () => void }> = ({
     };
   }, [name, getFile, setObjectUrl]);
 
+
+  // <Th>Play</Th>
+  //             <Th>Send</Th>
+  //             <Th>Delete</Th>
+  //             <Th>Download</Th>
+  //             <Th>Name</Th>
+  //             <Th>Local browser cache</Th>
   return (
     <Tr>
       <Td>
         <IconButton aria-label="play" onClick={onClick} icon={<FaPlay />} />
       </Td>
-      <Td>{name}</Td>
+
 
       <Td>
-        {cached ? (
-          <CheckIcon color="black" />
-        ) : (
-          <IconButton
-            aria-label="cache"
-            onClick={() => cacheFile(file)}
-            icon={<DownloadIcon />}
-          />
-        )}
+        <IconButton
+          aria-label="send"
+          onClick={async () => {
+            sendVideo && sendVideo(file);
+          }}
+          icon={<ArrowForwardIcon />}
+        />
+      </Td>
+
+      <Td>
+        <IconButton
+          aria-label="delete"
+          onClick={() => deleteFile(name)}
+          icon={<DeleteIcon />}
+        />
       </Td>
 
       <Td>
@@ -150,52 +163,25 @@ const FileLineItem: React.FC<{ file: FileBlob; onClick: () => void }> = ({
           }}
         />
       </Td>
-      <Td>
-        <IconButton
-          aria-label="delete"
-          onClick={() => deleteFile(name)}
-          icon={<DeleteIcon />}
-        />
-      </Td>
+
+      <Td>{name}</Td>
 
       <Td>
-        <IconButton
-          aria-label="send"
-          onClick={async () => {
-            sendVideo && sendVideo(file);
-          }}
-          icon={<ArrowForwardIcon />}
-        />
+        {cached ? (
+          <CheckIcon color="black" />
+        ) : (
+          <IconButton
+            aria-label="cache"
+            onClick={() => cacheFile(file)}
+            icon={<DownloadIcon />}
+          />
+        )}
       </Td>
+
+
+
+
+
     </Tr>
   );
-
-  // return (
-  //   <VStack>
-  //     <HStack>
-  //       <IconButton
-  //         aria-label="delete"
-  //         onClick={() => deleteFile(name)}
-  //         icon={<DeleteIcon />}
-  //       />
-  //       <Box onClick={onClick}>{name}</Box>
-
-  //       {cached ? (
-  //         <Box>cached</Box>
-  //       ) : (
-  //         <IconButton
-  //           aria-label="cache"
-  //           onClick={() => cacheFile(file)}
-  //           icon={<DownloadIcon />}
-  //         />
-  //       )}
-
-  //       {objectUrl ? (
-  //         <a download={name} href={objectUrl}>
-  //           download
-  //         </a>
-  //       ) : null}
-  //     </HStack>
-  //   </VStack>
-  // );
 };
