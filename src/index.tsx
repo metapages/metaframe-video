@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
 import localForage from "localforage";
 import { WithMetaframe } from "@metapages/metaframe-hook";
-// import { WithMetaframeAndInputs } from "@metapages/metaframe-hook";
 import { ChakraProvider } from "@chakra-ui/react";
 import { App } from "./App";
 

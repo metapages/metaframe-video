@@ -41,8 +41,6 @@ export const FileList: React.FC = () => {
           fileBlob.urlEncoded = URL.createObjectURL(file);
         }
         setVideoSrc({ src: fileBlob.urlEncoded!, type: file.type });
-      } else {
-        console.log("onClick but no file", fileBlob);
       }
     },
     [setVideoSrc]
@@ -69,7 +67,6 @@ export const FileList: React.FC = () => {
                 key={i}
                 file={file}
                 onClick={async () => {
-                  // console.log("clicked ", file.name);
                   onClick(file);
                 }}
               />
@@ -116,19 +113,11 @@ const FileLineItem: React.FC<{ file: FileBlob; onClick: () => void }> = ({
     };
   }, [name, getFile, setObjectUrl]);
 
-
-  // <Th>Play</Th>
-  //             <Th>Send</Th>
-  //             <Th>Delete</Th>
-  //             <Th>Download</Th>
-  //             <Th>Name</Th>
-  //             <Th>Local browser cache</Th>
   return (
     <Tr>
       <Td>
         <IconButton aria-label="play" onClick={onClick} icon={<FaPlay />} />
       </Td>
-
 
       <Td>
         <IconButton
@@ -177,11 +166,6 @@ const FileLineItem: React.FC<{ file: FileBlob; onClick: () => void }> = ({
           />
         )}
       </Td>
-
-
-
-
-
     </Tr>
   );
 };

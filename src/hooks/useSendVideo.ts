@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import { useMetaframe } from "@metapages/metaframe-hook";
-import objectHash from "object-hash";
 import { FileBlob } from "../components/FileBlob";
 import { useFileStore } from "../store";
 
@@ -18,25 +17,7 @@ export const useSendVideo: () =>
         return;
       }
 
-      const reader = new FileReader();
-      reader.addEventListener(
-        "load",
-        () => {
-          // convert image file to base64 string
-          if (reader.result) {
-            const base64String = (reader.result as string).split(",")[1];
-            metaframeBlob.metaframe?.setOutput("video", {
-              name: fileBlob.name,
-              value: base64String,
-              hash: objectHash.sha1(base64String),
-              type: "base64",
-            });
-          }
-        },
-        false
-      );
-
-      reader.readAsDataURL(file);
+      metaframeBlob.metaframe?.setOutput("video", file);
     },
     [metaframeBlob.metaframe, getFile]
   );

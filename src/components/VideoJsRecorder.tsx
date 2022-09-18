@@ -1,12 +1,10 @@
 import React, { useRef, useEffect } from "react";
-import { Box, HStack } from "@chakra-ui/react";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import recordrtc from "recordrtc";
 import Record from "videojs-record";
 import "video.js/dist/video-js.css";
 import "videojs-record/dist/css/videojs.record.css";
 import { useFileStore } from "../store";
-import { FileList } from "./FileList";
 import { useSendVideo } from "../hooks/useSendVideo";
 import { FileBlob } from "./FileBlob";
 
@@ -137,9 +135,6 @@ export const VideoJsRecorder: React.FC<{
         file: player.recordedData,
       };
       addFile(fileBlob);
-
-      console.log('sendVideo', sendVideo);
-
       sendVideo && sendVideo(fileBlob);
     });
   }, [options, onReady, sendVideo]);
@@ -156,10 +151,7 @@ export const VideoJsRecorder: React.FC<{
 
   return (
     <div data-vjs-player>
-      <video
-        ref={videoRef}
-        className="video-js vjs-default-skin"
-      />
+      <video ref={videoRef} className="video-js vjs-default-skin" />
     </div>
   );
 };

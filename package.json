@@ -27,7 +27,7 @@
     "@metapages/data-ref": "^0.1.4",
     "@metapages/hash-query": "^0.4.5",
     "@metapages/metaframe-hook": "^1.0.9",
-    "@metapages/metapage": "^0.12.3",
+    "@metapages/metapage": "^0.13.5",
     "@types/object-hash": "^2.2.1",
     "@types/recordrtc": "^5.6.8",
     "@types/shell-quote": "^1.7.1",
