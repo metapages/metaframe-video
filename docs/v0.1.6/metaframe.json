@@ -1,0 +1,23 @@
+{
+  "version": "0.6",
+  "metadata": {
+    "name": "Video/Audio Recorder",
+    "description": "Video and audio recording ",
+    "tags": [
+      "camera",
+      "sound",
+      "audio",
+      "video",
+      "recording",
+      "mp4",
+      "h264",
+      "webm"
+    ]
+  },
+  "outputs": {
+    "video": {
+      "type": "dataref"
+    }
+  },
+  "allow": "camera;microphone;fullscreen;autoplay;picture-in-picture"
+}
